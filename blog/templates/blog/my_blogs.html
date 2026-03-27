@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>My Blogs</h1>
+
+<div>
+<a href="{% url 'create_blog' %}">
+    <button>Create New Blog</button>
+</a>
+
+<!-- Admin Only -->
+{% if request.session.role == 'admin' %}
+<a href="{% url 'pending_blogs' %}">
+    <button>Pending Blogs</button>
+</a>
+{% endif %}
+
+<hr>
+
+{% for blog in blogs %}
+
+<div class="blog-card">
+
+<h2>{{ blog.title }}</h2>
+
+<p>{{ blog.content|truncatewords:20 }}</p>
+
+{% if blog.status == "rejected" %}
+    <p style="color:red"><strong>Rejected:</strong> {{ blog.rejection_reason }}</p>
+{% elif blog.status == "pending" %}
+    <p style="color:orange"><strong>Pending Approval</strong></p>
+{% elif blog.status == "approved" %}
+    <p style="color:green"><strong>Approved</strong></p>
+{% endif %}
+
+<div class="actions">
+     
+   <a href="{% url 'edit_blog' blog.id %}" class="btn"> <button> Edit </button></a>
+
+    <form method="POST" action="{% url 'delete_blog' blog.id %}">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+
+</div>
+
+</div>
+
+<br>
+
+{% empty %}
+
+<p>You haven't written any blogs yet.</p>
+
+{% endfor %}
+
+{% endblock %}

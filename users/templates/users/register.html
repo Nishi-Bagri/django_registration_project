@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+
+    <!---Linking CSS file from static folder-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+    <h2>Registration Form </h2>
+    {% if messages %}
+       {% for message in messages %}
+        <p style="color:green;">{{ message }}</p>
+       {% endfor %}
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+    <label>Name:</label><br><br>
+    <input type="text" name="name" placeholder="Enter Name" required><br><br>
+    <label>Email:</label><br><br>
+    <input type="email" name="email" placeholder="Enter Email"  pattern=".+@.+\..+" title="Enter a valid email like example@gmail.com" required><br><br>
+    <label>Password:</label><br><br>
+    <input type="password" name="password" placeholder="Enter Password" pattern="(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}"title="Password must be at least 6 characters and include a number" required><br><br>
+    <label>Confirm Password:</label><br><br>
+    <input type="password" name="confirm_password" placeholder="Confirm Password" required onkeyup="checkPassword()"><br><br>
+    <label>Phone:</label><br><br>
+    <input type="text" name="phone" placeholder="Enter Phone Number" required><br><br>
+    <label>Age:</label><br><br>
+    <input type="number" name="age" placeholder="Enter Age" required><br><br>
+    <label>Address:</label><br><br>
+    <textarea name="address" placeholder="Enter Address" required></textarea><br><br>
+    <p id="passError" style="color: red;"></p>
+    <button type="submit">Register</button>
+    <p>Already have an account? 
+    <a href="{% url 'login' %}">Login here</a>
+    </p>
+    </form>
+    </div>
+{% if error %}
+<p style ="color: red">{{ error }}</p>
+{% endif %}
+</body> 
+</html>  

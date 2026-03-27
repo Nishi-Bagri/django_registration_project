@@ -1,0 +1,30 @@
+{% extends "dashboards/dashboard_base.html" %}
+
+{% block dashboard_content %}
+
+<h1>Pending Blogs</h1>
+
+{% for blog in blogs %}
+
+    <h3>{{ blog.title }}</h3>
+    <p>{{ blog.content|truncatewords:20 }}</p>
+
+    {% if blog.status == "pending" %}
+        <a href="{% url 'approve_blog' blog.id %}">
+            <button>Approve</button>
+        </a>
+
+        <form method="POST" action="{% url 'reject_blog' blog.id %}" style="display:inline;">
+            {% csrf_token %}
+            <input type="text" name="reason" placeholder="Enter rejection reason" required>
+            <button type="submit">Reject</button>
+        </form>
+    {% endif %}
+
+    <hr>
+
+{% empty %}
+    <p>No pending blogs</p>
+{% endfor %}
+
+{% endblock %}

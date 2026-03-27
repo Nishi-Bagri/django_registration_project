@@ -1,0 +1,43 @@
+{% extends "dashboards/dashboard_base.html" %}
+
+{% block dashboard_content %}
+
+<h1>All Blogs (Admin)</h1>
+
+<div class="admin-blog-container">
+
+{% for blog in blogs %}
+
+    <div class="blog-card">
+
+        <h3>{{ blog.title }}</h3>
+
+        <p>{{ blog.content|truncatewords:20 }}</p>
+
+        <p class="status">Status: {{ blog.status }}</p>
+
+        <div class="actions">
+            <a href="{% url 'edit_blog' blog.id %}">
+                <button class="edit-btn">Edit</button>
+            </a>
+
+            <a href="{% url 'delete_blog' blog.id %}">
+                <button class="delete-btn">Delete</button>
+            </a>
+
+            {% if blog.status == 'pending' %}
+            <a href="{% url 'approve_blog' blog.id %}">
+                <button class="approve-btn">Approve</button>
+            </a>
+            {% endif %}
+        </div>
+
+    </div>
+
+{% empty %}
+    <p>No Blogs Available</p>
+{% endfor %}
+
+</div>
+
+{% endblock %}

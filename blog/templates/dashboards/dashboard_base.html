@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+    {% if request.session.role == 'admin' %}
+    <!-- Sidebar -->
+    <div class="admin-sidebar">
+        <h2>Admin Panel</h2>
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+        <a href="{% url 'admin_blog_list' %}">Blogs</a>
+        <a href="{% url 'pending_blogs' %}">Pending</a>
+        <a href="{% url 'user_list' %}">Users</a>
+        <a href="{% url 'upload_logo' %}">Upload Logo</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+    {% endif %}
+    <!-- Right Content -->
+    <div class="admin-content">
+        {% block dashboard_content %}
+        {% endblock %}
+    </div>
+
+</div>
+
+</body>
+</html>

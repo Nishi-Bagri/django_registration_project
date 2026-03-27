@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block dashboard_content %}
+
+<h2>User Dashboard</h2>
+
+<p>Welcome {{ request.session.user_name }}</p>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+    <h2>Login</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color:green;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <label>Email:</label>
+        <input type="email" name="email"  placeholder="Enter Email" pattern=".+.+\..+" title="Enter a valid email like example@gmail.com" required><br><br>
+        <label>Password:</label>
+        <input type="password" name="password" placeholder="Enter Password" minlength="6" required><br><br>
+        <button type="submit">Login</button><br>
+        
+    </form>
+    </div>
+</body>
+</html>

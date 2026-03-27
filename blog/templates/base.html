@@ -1,0 +1,60 @@
+{% load static %}
+
+<!doctype html>
+<html>
+  <head>
+    <title>User Blog</title>
+
+    <link rel="stylesheet" href="{% static 'css/user.css' %}" />
+  </head>
+
+  <body>
+    <form style="display: none">{% csrf_token %}</form>
+
+    <header>
+      <div class="navbar">
+        <div class="menu">
+         {% if user.profile_pic %}
+          <img
+            src="{{ user.profile_pic.url }}"
+            width="40"
+            height="40"
+            style="border-radius: 50%"
+          />
+          
+          {% else %}
+          <img
+            src="{% static 'images/default.png' %}"
+            width="40"
+            height="40"
+            style="border-radius: 50%"
+          />
+          {% endif %} 
+          <a href="{% url 'blog_list' %}">All Blogs</a>
+          <a href="{% url 'create_blog' %}">Create Blog</a>
+          <a href="{% url 'my_blogs' %}">My Blogs</a>
+          <a href="{% url 'edit_profile' %}">Profile</a>
+
+          <!-- Admin Access Link -->
+          {% if request.session.role == 'admin' %}
+          <a href="{% url 'admin_dashboard' %}">Admin Panel</a>
+          {% endif %}
+        </div>
+        <div class="nav-center logo">
+          {% if site_logo and site_logo.logo %}
+          <img src="{{ site_logo.logo.url }}" height="40" />
+          {% else %}
+          <img src="{% static 'images/logo.png' %}" height="40" />
+          {% endif %}
+        </div>
+
+        <div class="head-right">
+          <a href="{% url 'logout' %}"><button>Logout</button> </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">{% block content %} {% endblock %}</div>
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

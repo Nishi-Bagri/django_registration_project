@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h2>User Profile</h2>
+
+    <p><strong>Name:</strong>{{ user.name }}</p>
+    <p><strong>Email:</strong>{{ user.email }}</p>
+    <p><strong>Phone:</strong>{{ user.phone }}</p>
+    <p><strong>Age:</strong>{{ user.age }}</p>
+    <p><strong>Address:</strong>{{ user.address }}</p>
+
+    {% if user.profile_pic %}
+    <img src="{{ user.profile_pic.url }}" width="150" height="150">
+    {% else %}
+    <img src="{% static 'images/default.png' %}" width="150">
+    {% endif %}
+    <br>
+    <a href="{% url 'edit_profile' %}">Edit</a><br><br>
+
+    <a href="{% url 'blog_list' %}"> Back </a>
+
+    <a href="{% url 'logout' %}">Logout</a>
+
+</div>
+</body>
+</html>

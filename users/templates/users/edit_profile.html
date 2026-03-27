@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+    <h2>Edit Profile</h2>
+    <form method = "POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    
+    <label>Name:</label><br>
+    <input type="text" name="name" value="{{ user.name }}"><br><br>
+
+    <label>Phone:</label><br>
+    <input type="text" name="phone" value="{{ user.phone }}"><br><br>
+
+    <label>Age:</label><br>
+    <input type="text" name="age" value="{{ user.age }}"><br><br>
+
+    <label>Address:</label><br>
+    <textarea name="address"> {{ user.address }} </textarea><br><br>
+
+    <lable>Profile Picture</lable><br>
+
+    {% if user.profile_pic %}
+    <img src="{{ user.profile_pic.url }}" width="100" ><br><br>
+    {% endif %}
+
+    <input type="file" name="profile_pic"><br><br>
+
+    <button type="submit">Update Profile</button>
+
+    <button><a href="{% url 'edit_profile'  %}" style="color:white; text-decoration:none;">Edit Profile</a></button><br><br>
+
+   
+
+    </form>
+
+    <a href="{% url 'change_password' %}">Change Password</a>
+    </div>
+</body>
+</html>

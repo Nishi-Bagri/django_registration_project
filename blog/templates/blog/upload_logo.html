@@ -1,0 +1,25 @@
+{% extends "dashboards/dashboard_base.html" %}
+
+{% block dashboard_content %}
+
+<h1>Upload Website Logo</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label>Select Logo</label><br><br>
+    <input type="file" name="logo" required><br><br>
+
+    <button type="submit">Upload Logo</button>
+</form>
+
+<hr>
+
+{% if settings and settings.logo %}
+    <h3>Current Logo:</h3>
+    <img src="{{ settings.logo.url }}" width="150">
+{% else %}
+    <p> No logo uploaded yet</p>
+{% endif %}
+
+{% endblock %}
