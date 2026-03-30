@@ -22,4 +22,8 @@ urlpatterns = [
     # ✅ LIKE FEATURE
     path('like/<int:blog_id>/', views.toggle_like, name='toggle_like'),
     path('search-suggestions/',views.search_suggestions, name='search_suggestions'),
+
+    path('comment/edit/<int:comment_id>/', views.edit_comment, name='edit_comment'),
+
+    path('comment/delete/<int:comment_id>/', views.delete_comment, name='delete_comment'),
 ]

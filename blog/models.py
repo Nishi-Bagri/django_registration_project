@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import CustomUser
+from django.contrib.auth import get_user_model
 
 Status_Choices = [
     ('pending', 'Pending'),
@@ -36,6 +37,9 @@ class Like(models.Model):
         return f"{self.user} liked {self.blog}"
 
 # ✅ Add this Comment model
+
+User = get_user_model()
+
 class Comment(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.SET_NULL)

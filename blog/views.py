@@ -7,6 +7,16 @@ from .models import SiteSettings
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from blog.models import Blog, Comment
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from .forms import CommentForm
+
+def login_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if not request.session.get('user_id'):
+            return redirect('login')
+        return view_func(request, *args, **kwargs)
+    return wrapper
 
 def admin_required(view_func):
     def wrapper(request,*args,**kwargs):
@@ -134,21 +144,33 @@ def delete_blog(request, id):
 def blog_detail(request, id):
     blog = get_object_or_404(Blog, id=id)
 
+    user_id = request.session.get('user_id')
+    user = None
+
+    if user_id:
+        user = CustomUser.objects.get(id=user_id)
+
     if request.method == 'POST':
         content = request.POST.get('content')
+
+        if not user:
+            return redirect('login')
+
         if content:
             Comment.objects.create(
-                user=None,  # anonymous user
+                user=user,   # ✅ FIXED
                 blog=blog,
                 content=content
             )
-            return redirect('blog_detail', id=id)
+
+        return redirect('blog_detail', id=id)
 
     comments = Comment.objects.filter(blog=blog).order_by('-id')
 
     return render(request, 'blog/blog_detail.html', {
         'blog': blog,
-        'comments': comments
+        'comments': comments,
+        'user': user   # ✅ VERY IMPORTANT
     })
 
 @admin_required
@@ -277,3 +299,58 @@ def search_suggestions(request):
         suggestions = []
 
     return JsonResponse({'suggestions': suggestions})
+
+@login_required
+def edit_comment(request, comment_id):
+    # Get the comment
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    # Get logged-in user from session
+    user_id = request.session.get('user_id')
+
+    if not user_id:
+        return redirect('login')
+
+    user = CustomUser.objects.get(id=user_id)
+
+    # ✅ Permission check (VERY IMPORTANT)
+    if comment.user != user:
+        return HttpResponse("You cannot edit this comment")
+
+    # Handle form submission
+    if request.method == 'POST':
+        content = request.POST.get('content')
+
+        if content:
+            comment.content = content
+            comment.save()
+
+        return redirect('blog_detail', id=comment.blog.id)
+
+    # Show edit form
+    return render(request, 'blog/edit_comment.html', {
+        'comment': comment
+    })
+
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    user_id = request.session.get('user_id')
+
+    if not user_id:
+        return redirect('login')
+
+    user = CustomUser.objects.get(id=user_id)
+
+    # ✅ Permission check
+    if comment.user != user:
+        return HttpResponse("You cannot delete this comment")
+
+    # ✅ Only allow POST (important for security)
+    if request.method == "POST":
+        blog_id = comment.blog.id
+        comment.delete()
+        return redirect('blog_detail', id=blog_id)
+
+    return HttpResponse("Invalid request")

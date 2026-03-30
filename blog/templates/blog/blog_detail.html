@@ -4,52 +4,74 @@
 
 <div class="blog-card">
 
-<h1>{{ blog.title }}</h1>
+  <h1>{{ blog.title }}</h1>
 
-<p>
-<strong>Author:</strong> {{ blog.user.name }}
-</p>
+  <p><strong>Author:</strong> {{ blog.user.name }}</p>
 
-<p>
-<small>Posted on {{ blog.created_at }}</small>
-</p>
+  <p>
+    <small>Posted on {{ blog.created_at }}</small>
+  </p>
 
-<hr>
+  <hr>
 
-<p>{{ blog.content }}</p>
+  <p>{{ blog.content }}</p>
 
-<form method="POST">
+  <!-- ✅ COMMENT FORM -->
+  <form method="POST">
     {% csrf_token %}
     <textarea name="content" placeholder="Add a comment..." required></textarea>
     <button type="submit">Post Comment</button>
-</form>
+  </form>
 
-<h3>Comments</h3>
+  <h3>Comments</h3>
 
-{% for comment in comments %}
+  <!-- ✅ COMMENTS LOOP -->
+  {% for comment in comments %}
     <div class="comment-card">
-        <strong>
-            {% if comment.user %}
-                {{ comment.user.name }}
-            {% else %}
-                Anonymous
-            {% endif %}
-        </strong>:
-        <p>{{ comment.content }}</p>
+
+      <!-- ✅ USER NAME -->
+      <strong>
+        {% if comment.user %}
+          {{ comment.user.name }}
+        {% else %}
+          Anonymous
+        {% endif %}
+      </strong>
+     
+      <!-- ✅ COMMENT CONTENT -->
+      <p>{{ comment.content }}</p>
+
+      <div style="margin-top: 15px; margin-bottom: 15px;">
+
+      <!-- ✅ BUTTONS (TEMPORARY ALWAYS SHOW) -->
+      {% if comment.user and user and comment.user.id == user.id %}
+
+        <a href="{% url 'edit_comment' comment.id %}">
+          <button>Edit</button>
+        </a>
+
+        <form method="POST" action="{% url 'delete_comment' comment.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit">Delete</button>
+        </form>
+
+      {% endif %}
+
     </div>
-{% empty %}
+
+  {% empty %}
     <p>No comments yet.</p>
-{% endfor %}
+  {% endfor %}
 
-<br>
+  <br>
 
-<a href="{% url 'blog_list' %}">
+  <a href="{% url 'blog_list' %}">
     <button>Back to All Blogs</button>
-</a>
+  </a>
 
-<a href="{% url 'my_blogs' %}">
+  <a href="{% url 'my_blogs' %}">
     <button>My Blogs</button>
-</a>
+  </a>
 
 </div>
 
