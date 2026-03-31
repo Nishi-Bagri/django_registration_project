@@ -9,10 +9,10 @@
   <p><strong>Author:</strong> {{ blog.user.name }}</p>
 
   <p>
-    <small>Posted on {{ blog.created_at }}</small>
+    <small>Posted on {{ blog.created_at|date:"M d, Y - H:i" }}</small>
   </p>
 
-  <hr>
+  <hr />
 
   <p>{{ blog.content }}</p>
 
@@ -27,23 +27,25 @@
 
   <!-- ✅ COMMENTS LOOP -->
   {% for comment in comments %}
+
     <div class="comment-card">
 
-      <!-- ✅ USER NAME -->
-      <strong>
-        {% if comment.user %}
-          {{ comment.user.name }}
-        {% else %}
-          Anonymous
-        {% endif %}
-      </strong>
-     
-      <!-- ✅ COMMENT CONTENT -->
+      <!-- USER NAME + DATE -->
+      <p>
+        <strong>
+          {% if comment.user %}
+            {{ comment.user.name }}
+          {% else %}
+            Anonymous
+          {% endif %}
+        </strong>
+        • {{ comment.created_at|date:"M d, Y - H:i" }}
+      </p>
+
+      <!-- COMMENT CONTENT -->
       <p>{{ comment.content }}</p>
 
-      <div style="margin-top: 15px; margin-bottom: 15px;">
-
-      <!-- ✅ BUTTONS (TEMPORARY ALWAYS SHOW) -->
+      <!-- EDIT / DELETE BUTTONS -->
       {% if comment.user and user and comment.user.id == user.id %}
 
         <a href="{% url 'edit_comment' comment.id %}">
@@ -60,11 +62,14 @@
     </div>
 
   {% empty %}
+
     <p>No comments yet.</p>
+
   {% endfor %}
 
   <br>
 
+  <!-- NAVIGATION BUTTONS -->
   <a href="{% url 'blog_list' %}">
     <button>Back to All Blogs</button>
   </a>

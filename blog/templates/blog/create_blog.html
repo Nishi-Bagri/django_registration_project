@@ -1,32 +1,34 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <div class="form-container">
+  <h1>Create New Blog</h1>
 
-    <h1>Create New Blog</h1>
+  {% if messages %} {% for message in messages %}
+  <p>{{ message }}</p>
+  {% endfor %} {% endif %}
 
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
+  <form method="POST">
+    {% csrf_token %}
 
-    <form method="POST">
-        {% csrf_token %}
+    <label>Title</label><br />
+    <input type="text" name="title" required /><br /><br />
 
-        <label>Title</label><br>
-        <input type="text" name="title" required><br><br>
+    <!-- ✅ SUMMARY (ADD THIS) -->
+    <label>Summary</label><br />
+    <textarea
+      name="summary"
+      rows="3"
+      placeholder="Enter short description..."
+      required
+    ></textarea
+    ><br /><br />
 
-        <label>Content</label><br>
-        <textarea name="content" rows="6" required></textarea><br><br>
+    <label>Content</label><br />
+    <textarea name="content" rows="6" required></textarea><br /><br />
 
-        <button type="submit">Publish Blog</button><br><br>
+    <button type="submit">Publish Blog</button><br /><br />
 
-        <a href="{% url 'blog_list' %}"><button>Back to Blogs</button></a>
-
-    </form> 
-
-    
+    <a href="{% url 'blog_list' %}"><button>Back to Blogs</button></a>
+  </form>
 </div>
 {% endblock %}

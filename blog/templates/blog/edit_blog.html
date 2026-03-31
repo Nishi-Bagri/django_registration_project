@@ -9,6 +9,18 @@
 
   <input type="text" name="title" value="{{ blog.title }}" /><br /><br />
 
+  <!-- ✅ SUMMARY (ADD THIS) -->
+  <label>Summary</label><br />
+  <textarea
+    name="summary"
+    rows="3"
+    placeholder="Enter short description..."
+    required
+  >
+{{ blog.summary }}</textarea
+  >
+  ><br /><br />
+
   <label>Content</label><br />
 
   <textarea name="content" rows="6">{{ blog.content }}</textarea><br /><br />

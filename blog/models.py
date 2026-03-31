@@ -14,6 +14,8 @@ class Blog(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    summary = models.TextField(max_length=200, blank=True)
+
     status = models.CharField(max_length=20, choices=Status_Choices, default = 'pending')
     rejection_reason = models.TextField(blank=True, null=True)
 

@@ -136,3 +136,6 @@ LOGIN_REDIRECT_URL = 'blog_list'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+
+TIME_ZONE = 'Asia/Kolkata'   # ✅ Set to India
+USE_TZ = True 

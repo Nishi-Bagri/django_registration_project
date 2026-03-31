@@ -70,13 +70,17 @@ def create_blog(request):
     if request.method == "POST":
         title = request.POST.get('title')
         content = request.POST.get('content')
+        summary = request.POST.get('summary')
+
+        print("SUMMARY:", summary)
 
         user = CustomUser.objects.get(id=user_id)
 
         Blog.objects.create(
             user=user,
             title=title,
-            content=content
+            content=content,
+            summary = summary
         )
 
         return redirect('my_blogs')
@@ -110,6 +114,7 @@ def edit_blog(request, id):
     if request.method == "POST":
         blog.title = request.POST.get('title')
         blog.content = request.POST.get('content')
+        blog.summary = request.POST.get('summary')
         blog.save()
 
         return redirect('blog_list')

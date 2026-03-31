@@ -24,6 +24,8 @@
 
 <h2>{{ blog.title }}</h2>
 
+<h1>{{blog.summary }}</h1>
+
 <p>{{ blog.content|truncatewords:20 }}</p>
 
 {% if blog.status == "rejected" %}
