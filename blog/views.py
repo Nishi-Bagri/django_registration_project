@@ -37,17 +37,24 @@ def admin_required(view_func):
 def blog_list(request):
     query = request.GET.get('q')
 
+    #Step 1: Base queryset (approved blogs only)
+    blogs = Blog.objects.filter(status='approved')
+    
+    # Step 2: Apply search
     if query:
         blogs = Blog.objects.filter(
             Q(title__icontains=query) |
             Q(content__icontains=query)
         )
-    else:
-        blogs = Blog.objects.all()
+    
+    # Steps 3: Get user safely
 
-    # ✅ Fix like state
     user_id = request.session.get('user_id')
-    user = CustomUser.objects.get(id=user_id)
+    user = None
+
+    if user_id:
+        user = CustomUser.objects.filter(id=user_id).first()
+
     for blog in blogs:
         if user_id:
             blog.is_liked = Like.objects.filter(

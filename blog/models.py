@@ -19,6 +19,8 @@ class Blog(models.Model):
     status = models.CharField(max_length=20, choices=Status_Choices, default = 'pending')
     rejection_reason = models.TextField(blank=True, null=True)
 
+    is_approved = models.BooleanField(default=False)
+
     def __str__(self):
         return self.title
 

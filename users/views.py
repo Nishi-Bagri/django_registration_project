@@ -11,12 +11,17 @@ def register(request):
 
     if request.method == "POST":
         name = request.POST['name']
-        email = request.POST['email']
+        email = request.POST['email'].lower()
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
         phone = request.POST['phone']
         age = request.POST['age']
-        address = request.POST['address']
+        
+        house_no = request.POST.get('house_no')
+        street = request.POST.get('street')
+        district = request.POST.get('district')
+        city = request.POST.get('city')
+        pincode = request.POST.get('pincode')
         
 
          # Validate email format
@@ -51,7 +56,13 @@ def register(request):
             password=hashed_password,
             phone=phone,
             age=age,
-            address=address,
+
+            house_no=house_no,
+            street=street,
+            district=district,
+            city=city,
+            pincode=pincode,
+
             role = 'user'
         )
 

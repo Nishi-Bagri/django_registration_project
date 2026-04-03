@@ -31,9 +31,28 @@
     <input type="text" name="phone" placeholder="Enter Phone Number" required><br><br>
     <label>Age:</label><br><br>
     <input type="number" name="age" placeholder="Enter Age" required><br><br>
+    
+    <!-- Address Field -->
+
     <label>Address:</label><br><br>
-    <textarea name="address" placeholder="Enter Address" required></textarea><br><br>
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
+    
+
+    <input type="text" name="house_no" placeholder="House No" required><br><br>
+
+    <input type="text" name="street" placeholder="Street" required><br><br>
+
+    <input type="text" name="district" placeholder="District" required><br><br>
+
+    <input type="text" name="city" placeholder="City" required><br><br>
+
+    <input type="text" name="pincode" placeholder="Pincode" pattern="[0-9]{6}" required><br><br>
+     
+    </div><br>
+
     <p id="passError" style="color: red;"></p>
+     
+
     <button type="submit">Register</button>
     <p>Already have an account? 
     <a href="{% url 'login' %}">Login here</a>

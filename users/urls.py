@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('edit-profile/', edit_profile, name= 'edit_profile'),
     path('users/', user_list, name='user_list'),
+    path('register/', register, name='register'),
 
     # Password reset urls
 
