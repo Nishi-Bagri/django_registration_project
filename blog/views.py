@@ -10,6 +10,7 @@ from blog.models import Blog, Comment
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from .forms import CommentForm
+import requests
 
 def login_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -366,3 +367,52 @@ def delete_comment(request, comment_id):
         return redirect('blog_detail', id=blog_id)
 
     return HttpResponse("Invalid request")
+
+
+def fetch_posts(request):
+    url = "https://jsonplaceholder.typicode.com/posts"
+
+    try:
+        res = requests.get(url)
+        data = res.json()
+    except Exception as e:
+        return HttpResponse(f"Error fetching data: {e}")
+    
+    ## Get logged-in user
+    user_id = request.session.get('user_id')  # your login system
+    
+    if not user_id:
+        return HttpResponse("User not logged in!")
+    
+    try:
+       user = CustomUser.objects.get(id=user_id)
+    except CustomUser.DoesNotExist:
+        return HttpResponse("User not found!")
+    
+    created_count = 0
+    updated_count = 0
+
+    for item in data[:5]:
+        blog, created = Blog.objects.update_or_create(
+            title=item['title'],
+            user=user,    # <-- ensures uniqueness per user
+            defaults={
+                'content': item['body'],
+                'status': 'approved',   # ✅ auto-approve API content
+                'user': user
+            }
+        )
+
+        if created:
+            created_count += 1
+        else:
+            updated_count += 1
+
+    return HttpResponse(
+        f"Automation Done! Created: {created_count}, Updated: {updated_count}"
+    )
+
+# Existing blog list view (example)
+def blog_list(request):
+    blogs = Blog.objects.filter(status='approved')  # only approved visible
+    return render(request, 'blog_list.html', {'blogs': blogs})
