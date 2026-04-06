@@ -102,4 +102,34 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 300); // ✅ correct position
     });
   }
+  // 🚀 ADD THIS CODE HERE (JUST BEFORE FINAL }); )
+
+  const fetchBtn = document.getElementById("fetchBtn");
+
+  if (fetchBtn) {
+    fetchBtn.addEventListener("click", function () {
+      console.log("Fetch button clicked");
+
+      fetchBtn.innerText = "Fetching...";
+      fetchBtn.disabled = true;
+
+      fetch("/blog/fetch/")
+        .then((response) => {
+          if (!response.ok) throw new Error("Network error");
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Fetch response:", data);
+          alert(`Created: ${data.created}, Updated: ${data.updated}`);
+          location.reload();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Error fetching blogs");
+
+          fetchBtn.innerText = "Fetch Blogs";
+          fetchBtn.disabled = false;
+        });
+    });
+  }
 });

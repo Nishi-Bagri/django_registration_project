@@ -412,7 +412,3 @@ def fetch_posts(request):
         f"Automation Done! Created: {created_count}, Updated: {updated_count}"
     )
 
-# Existing blog list view (example)
-def blog_list(request):
-    blogs = Blog.objects.filter(status='approved')  # only approved visible
-    return render(request, 'blog_list.html', {'blogs': blogs})

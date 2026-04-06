@@ -21,6 +21,10 @@
     <button>Pending Blogs</button>
 </a>
 {% endif %}
+
+<!-- ✅ ADD THIS BUTTON -->
+<button onclick="fetchPosts()">Fetch Blogs</button>
+
 </div>
 
 <!---Page Header-->
@@ -87,5 +91,22 @@
 
 {% endfor %}
 </div>
+
+<script>
+function fetchPosts() {
+    console.log("CLICK WORKING");
+
+    fetch("/blog/fetch/")
+    .then(response => response.json())
+    .then(data => {
+        alert("Blogs fetched!");
+        location.reload();
+    })
+    .catch(error => {
+        console.log(error);
+        alert("Error");
+    });
+}
+</script>
 
 {% endblock %}
